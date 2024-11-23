@@ -1,29 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เข้าสู่เกมนักสืบ</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="game-container">
-    <h1>ยินดีต้อนรับเข้าสู่เกมนักสืบ</h1>
-    <p>กรุณาใส่ชื่อของคุณ:</p>
-    <input type="text" id="player-name" placeholder="ชื่อของคุณ">
-    <button id="start-game">เริ่มเกม</button>
-  </div>
+<%- include('./partials/header') %>
 
-  <script>
-    document.getElementById('start-game').addEventListener('click', () => {
-      const playerName = document.getElementById('player-name').value.trim();
-      if (playerName) {
-        sessionStorage.setItem('playerName', playerName); // บันทึกชื่อใน sessionStorage
-        window.location.href = 'character.html'; // ไปที่หน้าเลือกตัวละคร
-      } else {
-        alert('กรุณาใส่ชื่อของคุณ!');
-      }
-    });
-  </script>
-</body>
-</html>
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="row align-items-center justify-content-center gap-4">
+    <!-- Login Card -->
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary mb-3">ยินดีต้อนรับเข้าสู่เกมนักสืบ</h1>
+            <p class="lead text-muted">กรุณาใส่ชื่อของคุณ:</p>
+          </div>
+          
+          <div class="form-floating mb-4">
+            <input 
+              type="text" 
+              class="form-control form-control-lg" 
+              id="player-name" 
+              placeholder="ชื่อของคุณ"
+              maxlength="30"
+              required
+            >
+            <label for="player-name">ชื่อของคุณ</label>
+          </div>
+          
+          <div class="d-grid">
+            <button 
+              id="start-game" 
+              class="btn btn-primary btn-lg"
+            >
+              <i class="bi bi-play-fill me-2"></i>เริ่มเกม
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Card -->
+    <div class="col-md-4">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white py-3">
+          <h3 class="card-title mb-0 text-center">
+            <i class="bi bi-trophy-fill me-2"></i>อันดับนักสืบ
+          </h3>
+        </div>
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            <% leaderboard.forEach((player, index) => { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3 list-hover">
+                <div class="d-flex align-items-center gap-2">
+                  <!-- Rank Badge -->
+                  <% 
+                    let badgeClass = 'bg-light text-dark';
+                    if (index === 0) badgeClass = 'bg-warning';
+                    if (index === 1) badgeClass = 'bg-secondary';
+                    if (index === 2) badgeClass = 'bg-bronze';
+                  %>
+                  <span class="badge <%= badgeClass %> rounded-pill">
+                    <%= index + 1 %>
+                  </span>
+
+                  <!-- Player Name -->
+                  <div class="d-flex align-items-center">
+                    <span class="fw-bold"><%= player.name %></span>
+                    <% if (player.cases_solved >= 10) { %>
+                      <i class="bi bi-patch-check-fill text-primary ms-2" 
+                         title="ผ่าน <%= player.cases_solved %> คดี"></i>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- Score Badge -->
+                <span class="badge bg-primary rounded-pill px-3">
+                  <%= player.score.toLocaleString() %>
+                </span>
+              </li>
+            <% }); %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast for notifications -->
+<div class="toast-container position-fixed top-50 start-50 translate-middle">
+  <div id="liveToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        กรุณาใส่ชื่อของคุณ!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<style>
+
+body {
+  background-image: url('/images/703fd7bb-b4d6-4d28-8675-04e4ba484b0e.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+.bg-bronze {
+  background-color: #cd7f32;
+  color: white;
+}
+
+.list-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.list-hover:hover {
+  background-color: rgba(13, 110, 253, 0.05);
+  transform: translateX(5px);
+}
+
+.badge {
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Smooth button animation */
+.btn-primary {
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+</style>
+
+<script>
+// Start game handler
+document.getElementById('start-game').addEventListener('click', handleStartGame);
+document.getElementById('player-name').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleStartGame();
+});
+
+function handleStartGame() {
+  const playerName = document.getElementById('player-name').value.trim();
+  
+  if (playerName) {
+    // Store player data
+    sessionStorage.setItem('playerName', playerName);
+    sessionStorage.setItem('startTime', new Date().toISOString());
+    
+    // Redirect to game
+    window.location.href = '/character';
+  } else {
+    // Show error toast
+    const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+    toast.show();
+    
+    // Focus input
+    document.getElementById('player-name').focus();
+  }
+}
+
+// Tooltip initialization for verified badges
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+tooltipTriggerList.map(element => new bootstrap.Tooltip(element));
+</script>
+
+<%- include('./partials/footer') %>
