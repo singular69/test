@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เลือกตัวละคร</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <h2>เลือกตัวละคร</h2>
+    <div class="characters">
+      <button class="character" data-gender="male">ผู้ชาย</button>
+      <button class="character" data-gender="female">ผู้หญิง</button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.character').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const gender = e.target.dataset.gender;
+        sessionStorage.setItem('characterGender', gender); // บันทึกเพศตัวละคร
+        window.location.href = 'map.html'; // ไปที่หน้าแผนที่
+      });
+    });
+  </script>
+</body>
+</html>

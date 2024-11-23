@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สถานการณ์ที่ 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <h2>สถานการณ์ที่ 1: การทุจริตในงบประมาณก่อสร้าง</h2>
+    <p>หัวหน้าส่งคำสั่ง: <br> "โปรดสอบสวนเหตุการณ์ทุจริตในตำบลยุหว่า โดยเริ่มจากฟังคำบอกเล่าของชาวบ้าน"</p>
+
+    <!-- บทสนทนาชาวบ้าน -->
+    <div id="conversations">
+      <h3>บทสนทนาของชาวบ้าน</h3>
+      <ul>
+        <li>ชาวบ้าน 1: "ฉันเห็นผู้ชายตัวสูงๆ ขับรถหรูมาที่สำนักงานหลายครั้งในช่วงงบก่อสร้าง"</li>
+        <li>ชาวบ้าน 2: "ได้ยินมาว่ามีการจ่ายเงินใต้โต๊ะให้ใครบางคนในตำแหน่งสูงๆ"</li>
+        <li>ชาวบ้าน 3: "ผู้หญิงที่อยู่ในกลุ่มนั้นดูเหมือนจะมีส่วนรู้เห็นด้วยนะ แต่เธอเงียบมาก"</li>
+      </ul>
+    </div>
+
+    <!-- เบาะแสเพิ่มเติม -->
+    <div id="clues">
+      <h3>เบาะแสเพิ่มเติม</h3>
+      <p>จากคำบอกเล่า เราได้เบาะแสสำคัญ:</p>
+      <ul>
+        <li>รูปพรรณสัณฐานของผู้ทุจริต: ตัวสูง, ผิวขาว</li>
+        <li>รถยนต์: สีดำหรูหรา</li>
+      </ul>
+    </div>
+
+    <!-- ผู้ต้องสงสัย -->
+    <div id="suspects">
+      <h3>ผู้ต้องสงสัย</h3>
+      <div class="suspect" data-id="1">
+        <h4>นายสมชาย</h4>
+        <p>ลักษณะ: ตัวสูง ผิวขาว, มีนิสัยทะเยอทะยาน</p>
+        <p>"ผมแค่ทำงานของผม ไม่มีส่วนเกี่ยวข้องกับเงินนอกระบบเลย!"</p>
+        <button class="select-suspect" data-id="1">เลือก</button>
+      </div>
+      <div class="suspect" data-id="2">
+        <h4>นางสาวสุดา</h4>
+        <p>ลักษณะ: ตัวเล็ก ผิวเข้ม, เงียบขรึม</p>
+        <p>"ฉันอยู่ในที่ประชุมวันนั้น แต่ไม่ได้มีส่วนเกี่ยวข้องใดๆ!"</p>
+        <button class="select-suspect" data-id="2">เลือก</button>
+      </div>
+      <div class="suspect" data-id="3">
+        <h4>นายดำรง</h4>
+        <p>ลักษณะ: ตัวเตี้ย ผิวขาว, ช่างพูด</p>
+        <p>"ผมอยู่ในตำแหน่งที่เกี่ยวข้อง แต่คุณไม่มีหลักฐานว่าเป็นผม!"</p>
+        <button class="select-suspect" data-id="3">เลือก</button>
+      </div>
+    </div>
+
+    <!-- หน้าผลลัพธ์ -->
+    <div id="result" style="display: none;">
+      <h3>บทสรุป</h3>
+      <p id="result-text"></p>
+      <p>หากพบเหตุการณ์คล้ายกันในชีวิตจริง คุณสามารถร้องเรียนได้ที่:</p>
+      <ul>
+        <li>สำนักงาน ป.ป.ช. โทร: 1205</li>
+        <li>ศูนย์ดำรงธรรม โทร: 1567</li>
+      </ul>
+      <button id="next-level">ไปด่านถัดไป</button>
+    </div>
+  </div>
+
+  <script>
+    // รายละเอียดผู้ต้องสงสัย
+    const suspects = [
+      { id: 1, name: "นายสมชาย", score: 10, details: "ดูเหมือนจะมีหลักฐานชัดเจนที่สุด" },
+      { id: 2, name: "นางสาวสุดา", score: 5, details: "พฤติกรรมเงียบ อาจมีส่วนรู้เห็น" },
+      { id: 3, name: "นายดำรง", score: 2, details: "ไม่เกี่ยวข้องโดยตรง แต่มีจุดน่าสงสัยเล็กน้อย" },
+    ];
+
+    // กดเลือกผู้ต้องสงสัย
+    document.querySelectorAll('.select-suspect').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const suspectId = parseInt(e.target.dataset.id);
+        const selectedSuspect = suspects.find(s => s.id === suspectId);
+
+        // แสดงผลการวิเคราะห์
+        const resultText = `
+          คุณเลือก ${selectedSuspect.name} 
+          เป็นผู้ต้องสงสัยที่น่าสงสัยที่สุด! 
+          คะแนนที่คุณได้รับ: ${selectedSuspect.score} คะแนน
+          <br>เหตุผล: ${selectedSuspect.details}
+        `;
+        document.getElementById("result-text").innerHTML = resultText;
+
+        // ซ่อนส่วนเลือก แสดงผลลัพธ์
+        document.getElementById("suspects").style.display = "none";
+        document.getElementById("result").style.display = "block";
+      });
+    });
+
+    // ไปยังด่านถัดไป
+    document.getElementById("next-level").addEventListener("click", () => {
+      alert("ไปยังด่านถัดไป!");
+      // window.location.href = "map.html"; // ด่านถัดไป
+    });
+  </script>
+</body>
+</html>

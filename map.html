@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แผนที่</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <h2>แผนที่: ตำบลยุหว่า</h2>
+    <p>สวัสดี, <span id="player-name"></span>!</p>
+    <p>เลือก "ถัดไป" เพื่อเริ่มสถานการณ์ที่ 1</p>
+    <button id="next-scenario">ถัดไป</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const playerName = sessionStorage.getItem('playerName') || 'ผู้เล่น'; 
+      document.getElementById('player-name').textContent = playerName;
+    });
+
+    document.getElementById('next-scenario').addEventListener('click', () => {
+      window.location.href = 'scenario1.html'; // ไปที่หน้าสถานการณ์แรก
+    });
+  </script>
+</body>
+</html>
